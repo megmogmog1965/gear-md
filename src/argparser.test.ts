@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterAll } from 'vitest'
-import { getArgs } from './argparser.js'
+import { usage, getArgs } from './argparser.js'
 
 
 beforeEach(() => {
@@ -44,7 +44,7 @@ describe('getArgs()', () => {
     const { args, error } = await getArgs(['command_name'])
 
     // assertion.
-    expect(args?.values).toStrictEqual({ help: false })
+    expect(args?.values).toStrictEqual({ help: false, multiple: undefined })
     expect(error).toBeUndefined()
   })
 
@@ -53,7 +53,7 @@ describe('getArgs()', () => {
     const { args, error } = await getArgs(['command_name', '-h'])
 
     // assertion.
-    expect(args?.values).toStrictEqual({ help: true })
+    expect(args?.values).toStrictEqual({ help: true, multiple: undefined })
     expect(error).toBeUndefined()
   })
 
@@ -62,7 +62,40 @@ describe('getArgs()', () => {
     const { args, error } = await getArgs(['command_name', '--help'])
 
     // assertion.
-    expect(args?.values).toStrictEqual({ help: true })
+    expect(args?.values).toStrictEqual({ help: true, multiple: undefined })
     expect(error).toBeUndefined()
+  })
+
+  it('values, -m', async () => {
+    // call.
+    const { args, error } = await getArgs(['command_name', '-m', 'multiple'])
+
+    // assertion.
+    expect(args?.values).toStrictEqual({ help: false, multiple: 'multiple' })
+    expect(error).toBeUndefined()
+  })
+
+  it('values, --multiple', async () => {
+    // call.
+    const { args, error } = await getArgs(['command_name', '--multiple', 'multiple'])
+
+    // assertion.
+    expect(args?.values).toStrictEqual({ help: false, multiple: 'multiple' })
+    expect(error).toBeUndefined()
+  })
+})
+
+describe('usage()', () => {
+  it('Unknown option', async () => {
+    // call.
+    const actual = usage()
+
+    const { args } = getArgs(['test'])
+    const keys = Object.keys(args!.values)
+
+    // assertion.
+    for (const key of keys) {
+      expect(actual).toContain(`--${key}`)
+    }
   })
 })

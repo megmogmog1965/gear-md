@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterAll } from 'vitest'
-import { parseJsonRecursively, createYamlString } from './converter.js'
+import { parseJsonRecursively, createMarkdownString } from './converter.js'
 
 
 beforeEach(() => {
@@ -83,19 +83,122 @@ describe('parseJsonRecursively()', () => {
   })
 })
 
-// describe('createYamlString()', () => {
-//   it('Unknown option', async () => {
-//     const json = {
-//       key1: 'value1',
-//       key2: 'value2',
-//     }
+describe('createMarkdownString()', () => {
+  it('null', async () => {
+    const obj = null
 
-//     // call.
-//     const actual = createYamlString(json)
+    // call.
+    const actual = createMarkdownString(obj)
 
-//     // assertion.
-//     expect(actual).toBe(`
-// key1: value1
-// key2: value2`.trim() + '\n')
-//   })
-// })
+    // assertion.
+    expect(actual).toBe(`
+null
+    `.trim())
+  })
+
+  it('number', async () => {
+    const obj = 123
+
+    // call.
+    const actual = createMarkdownString(obj)
+
+    // assertion.
+    expect(actual).toBe(`
+123
+    `.trim())
+  })
+
+  it('string', async () => {
+    const obj = 'hello'
+
+    // call.
+    const actual = createMarkdownString(obj)
+
+    // assertion.
+    expect(actual).toBe(`
+hello
+    `.trim())
+  })
+
+  it('object', async () => {
+    const obj = {
+      key1: null,
+      key2: 123,
+      key3: 'value',
+    }
+
+    // call.
+    const actual = createMarkdownString(obj)
+
+    // assertion.
+    expect(actual).toBe(`
+# key1
+
+null
+
+# key2
+
+123
+
+# key3
+
+value
+    `.trim())
+  })
+
+  it('array', async () => {
+    const obj = [
+      null,
+      123,
+      'value',
+    ]
+
+    // call.
+    const actual = createMarkdownString(obj)
+
+    // assertion.
+    expect(actual).toBe(`
+# 1
+
+null
+
+# 2
+
+123
+
+# 3
+
+value
+    `.trim())
+  })
+
+  it('nested object/array', async () => {
+    const obj = {
+      key1: [
+        {
+          key2: 'value 2',
+        },
+      ],
+      key3: 'value 3',
+    }
+
+    // call.
+    const actual = createMarkdownString(obj)
+
+    // assertion.
+    expect(actual).toBe(`
+# key1
+
+## 1
+
+### key2
+
+value 2
+
+# key3
+
+value 3
+    `.trim())
+  })
+})
+

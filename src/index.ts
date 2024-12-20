@@ -41,9 +41,8 @@ async function main(): Promise<boolean> {
   // parse json recursively.
   const deep = parseJsonRecursively(shallow)
 
-  const multipleByKey = args.values.multiple
-
   // determine output file path(s).
+  const multipleByKey = args.values.multiple
   const jobs: { path: string, obj: JsonTypes }[] = (multipleByKey && Array.isArray(deep))
     ? deep
       .filter((obj) => multipleByKey in obj)
@@ -79,7 +78,7 @@ async function main(): Promise<boolean> {
  * load json file.
  *
  * @param {string} filePath json file path.
- * @returns {any | undefined} json object or undefined.
+ * @returns {any | undefined} javascript object or undefined.
  */
 function loadJson(filePath: string): any | undefined {  // eslint-disable-line @typescript-eslint/no-explicit-any
   try {
@@ -91,10 +90,17 @@ function loadJson(filePath: string): any | undefined {  // eslint-disable-line @
   }
 }
 
+/**
+ * load yaml file.
+ *
+ * @param {string} filePath yaml file path.
+ * @returns {any | undefined} javascript object or undefined.
+ */
 function loadYaml(filePath: string): any | undefined {  // eslint-disable-line @typescript-eslint/no-explicit-any
   try {
     const file = fs.readFileSync(filePath, 'utf-8')
     return YAML.parse(file)
+
   } catch (e) {  // eslint-disable-line @typescript-eslint/no-unused-vars
     return undefined
   }

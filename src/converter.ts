@@ -60,7 +60,7 @@ export function createMarkdownString(json: JsonTypes, depth: number = 0, key: st
   // Array.
   if (Array.isArray(json)) {
     return json.reduce((acc, value, index) => {
-      return `${acc}\n\n${'#'.repeat(depth + 1)} ${index}\n\n${createMarkdownString(value, depth + 1)}`.trim()
+      return `${acc}\n\n${'#'.repeat(depth + 1)} ${index + 1}\n\n${createMarkdownString(value, depth + 1)}`.trim()
     }, '')
   }
 
