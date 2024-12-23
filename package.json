@@ -1,6 +1,6 @@
 {
   "name": "gear-md",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Json/Yaml to Markdown converter for GEAR.indigo.",
   "repository": {
     "type": "git",

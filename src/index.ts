@@ -27,14 +27,21 @@ async function main(): Promise<boolean> {
     return false
   }
 
-  // choose file loader.
+  // invalid file extension.
   const filePath = args.positionals[0].trim()
-  const loader = filePath.toLocaleLowerCase().endsWith('.json') ? loadJson : loadYaml
+  const ext = filePath.toLocaleLowerCase().slice(filePath.lastIndexOf('.'))
+  if (!['.json', '.yaml', '.yml'].includes(ext)) {
+    console.log(`Invalid file extension.\n\n${usage()}`)
+    return false
+  }
+
+  // choose file loader.
+  const loader = ext === '.json' ? loadJson : loadYaml
 
   // read local json file.
   const shallow = loader(filePath)
   if (!shallow) {
-    console.log(usage())
+    console.log(`Parse error.\n\n${usage()}`)
     return false
   }
 
